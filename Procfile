@@ -1,1 +1,1 @@
-web: gunicorn experiments/experiments.wsgi --log-file -
+web: gunicorn experiments/experiments.wsgi --log-file --pythonpath=./experiments -
