@@ -13,13 +13,13 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.RemoveField(
+            model_name='trial',
+            name='id',
+        ),
         migrations.AddField(
             model_name='trial',
             name='uid',
             field=models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False, unique=True),
-        ),
-        migrations.RemoveField(
-            model_name='trial',
-            name='id',
         ),
     ]
