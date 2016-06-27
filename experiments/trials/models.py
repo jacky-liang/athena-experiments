@@ -18,17 +18,17 @@ class Trial(models.Model):
     
     #times:
     creation_time = models.DateTimeField(auto_now_add=True)
-    completion_time = models.DateTimeField(blank=True)
+    completion_time = models.DateTimeField(null=True)
     
     #survey:
-    age = models.IntegerField(blank=True)
-    wpm = models.IntegerField(blank=True)
-    video_game_player = models.BooleanField(default=False)
-    experience = models.IntegerField(default=0)
-    email = models.EmailField()
+    age = models.IntegerField(null=True)
+    wpm = models.IntegerField(null=True)
+    video_game_player = models.NullBooleanField(null=True)
+    experience = models.IntegerField(null=True)
+    email = models.EmailField(null=True)
 
     #data
-    events = PickledObjectField()
+    events = PickledObjectField(null=True)
     '''
     #shared by both types
     secs
