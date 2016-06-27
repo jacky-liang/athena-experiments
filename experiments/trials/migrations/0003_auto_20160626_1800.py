@@ -18,9 +18,8 @@ class Migration(migrations.Migration):
             name='uid',
             field=models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False, unique=True),
         ),
-        migrations.AlterField(
+        migrations.RemoveField(
             model_name='trial',
             name='id',
-            field=models.AutoField(primary_key=True),
         ),
     ]
