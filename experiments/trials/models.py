@@ -5,8 +5,11 @@ from picklefield.fields import PickledObjectField
 import uuid
 
 class Trial(models.Model):
-    #token
-    token = models.UUIDField(primary_key=False, default=uuid.uuid4, editable=False)
+    #id
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
+    
+    #verification token
+    token = models.UUIDField(primary_key=False, default=uuid.uuid4, editable=False, unique=True)
     
     #flags:
     trial_completed = models.BooleanField(default=False)
