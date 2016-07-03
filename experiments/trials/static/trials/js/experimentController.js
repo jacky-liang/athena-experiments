@@ -10,6 +10,7 @@ var numCircles = 4;
 //Initializes the game
 function initGame(){
 	gameData.score = 0;
+	updateScore();
 	gameData.lastSwitch = 0;
 	gameData.currentTask = 0;
 	console.log("Finished Initialization, waiting on user ready...");
@@ -25,6 +26,7 @@ function initGame(){
 //Sets up the tedious Task
 function tediousTask(){
 	$('#gameWindow').empty();
+	$('#userInput').css("display", "block");
 	gameData.taskCount = numString;
 	gameData.tediousArray = [];
 
@@ -46,6 +48,8 @@ function tediousTask(){
 
 function relaxedTask(){
 	$('#gameWindow').empty();
+	$('#userInput').css("display", "none");
+
 	gameData.taskCount = numCircles;
 	var circleTypes = shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9]);
 	
@@ -68,6 +72,7 @@ function getUserText(){
 		for (var i in gameData.tediousArray){
 			if(gameData.tediousArray[i] == userInput){	//If user typed in a right word, determine which game to switch to
 				gameData.score++;
+				updateScore();
 				$('#' + userInput).remove();
 				gameData.taskCount--;
 				storeExperimentData();
@@ -204,6 +209,12 @@ function shuffle(array) {
 function endExperiment(){
 	$('#gameWindow').empty();
 	$('#gameWindow').append("<div>Experiment is over..</div>");
+}
+
+//Updates the score Window
+function updateScore(){
+	$('#scoreWindow').empty();
+	$('#scoreWindow').append("Score: " + gameData.score);
 }
 
 //Stores experiment data

@@ -3,6 +3,7 @@ html, body {
   height: 100%;
   overflow: hidden; 
   margin : 0;
+	background-color:#E3DAC9
 }
 
 textarea{
@@ -45,10 +46,32 @@ textarea{
 }
 
 .tediousTask{
-	font-size: 15px;
-	font-family: Helvetica;
+	font-size: 20px;
+	font-family: 'Slabo 27px', serif;
 }
 
 .hover{
 	filter: brightness(50%);
+}
+
+.textContainer{
+	width: 80%;
+	height:100%;
+	float: left;
+}
+
+#userInput{
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+#scoreWindow{
+	width: 20%;
+	height:100%;
+	float: right;
+	font-size: 25px;
+	font-family: 'Slabo 27px', serif;	
+	padding-left: 20px;
+	box-sizing: border-box;
 }
