@@ -18,6 +18,7 @@ class Trial(models.Model):
     
     #times:
     creation_time = models.DateTimeField(auto_now_add=True)
+    start_time = models.DateTimeField(null=True)
     completion_time = models.DateTimeField(null=True)
     
     #survey:
