@@ -35,10 +35,12 @@ class Trial(models.Model):
     secs
     is_tedious
     is_mistake
+    
     #tedious data
     intended_key
     pressed_key
     is_backspace
+    
     #relaxed data
     is_key_down
     '''  
