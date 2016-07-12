@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+ 
+ 	<meta charset="utf-8">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Athena Experiment</title>
+
+  <!-- Libraries -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js" integrity="sha256-tp8VZ4Y9dg702r7D6ynzSavKSwB9zjariSZ4Snurvmw=" crossorigin="anonymous"></script>
+
+  <!-- CSS and JS-->
+  <script src="./../../static/trials/js/experimentController.js"></script>
+  <link rel="stylesheet" type="text/css" href="./../../static/trials/css/stylesheet.css">
+
+</head>
+
+<body>
+  <div class = "gameContainer">
+  	<table class = "gameTableContainer">
+	  	<tr class = "gameWindow">
+        <td>
+          <div id= "gameWindow" class = "gameDivContainer"></div>
+        </td>
+	  	</tr>
+	  	<tr class = "inputWindow">
+        <td>
+          <div class = "textContainer"><textarea id = "userInput" oninput = "getUserText()"></textarea></div>
+					<div id = "scoreWindow"></div>
+        </td>
+	  	</tr>
+  	</table>
+  </div>
+</body>
+</html>
