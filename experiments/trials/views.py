@@ -8,7 +8,6 @@ from datetime import datetime
 from django.utils import timezone
 
 _TRIAL_LENGTH = os.environ['TRIAL_LENGTH']
-_SAMPLING_PERIOD = os.environ['SAMPLING_PERIOD']
 
 #TODO: ONLY FOR DEBUG
 from django.views.decorators.csrf import csrf_exempt
@@ -141,14 +140,9 @@ def complete(request):
         events = trial.events
         
         enough_time = elapsed_seconds >= _TRIAL_LENGTH
-        enough_events = len(events) > _TRIAL_LENGTH / _SAMPLING_PERIOD
         
-        if False in (enough_time, enough_events):
-            res_data['msg'] = []
-            if not enough_time:
-                res_data['msg'].append('Not enough time has elapsed since start of trial!')
-            if not enough_events:
-                res_data['msg'].append('Not enough events have been submitted for this trial!')
+        if not enough_time:
+            res_data['msg'] = 'Not enough time has elapsed since start of trial!'
             return JsonResponse(res_data)
         
         trial.trial_completed = True
