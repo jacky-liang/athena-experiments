@@ -130,7 +130,8 @@ function makeCircle(num, divsize, type){
     		}
     	}
     });
-    $newdiv.prepend('<img src="./../../static/trials/assets/circle' + num + '.png" class = "circleImg"/>');
+    
+    $newdiv.prepend('<img src="' + ENV.ASSET_PATH + 'circle' + num + '.png" class = "circleImg"/>');
     $('#gameWindow').append($newdiv);
 }
 

@@ -1,25 +1,26 @@
-<!doctype html>
-<html lang="en">
-<head>
- 
- 	<meta charset="utf-8">
-  <meta name="description" content="">
-  <meta name="author" content="">
+{% extends "trials/__base.html" %}
 
-  <title>Athena Experiment</title>
+{% load staticfiles %}
 
-  <!-- Libraries -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-  <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js" integrity="sha256-tp8VZ4Y9dg702r7D6ynzSavKSwB9zjariSZ4Snurvmw=" crossorigin="anonymous"></script>
+{% block extra_head %}
+    <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js" integrity="sha256-tp8VZ4Y9dg702r7D6ynzSavKSwB9zjariSZ4Snurvmw=" crossorigin="anonymous"></script>
+    <!-- Local css and js-->
+    <script src="{% static 'trials/js/experimentController.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'trials/css/experiment.css' %}">
+{% endblock %}
 
-  <!-- CSS and JS-->
-  <script src="./../../static/trials/js/experimentController.js"></script>
-  <link rel="stylesheet" type="text/css" href="./../../static/trials/css/stylesheet.css">
+{% block env %}
+<script type="text/javascript">
+    var ENV = {
+        'TRIAL_ID':"{{id}}",
+        'ASSET_PATH': "{% static 'trials/assets/' %}",
+        'TRIAL_LENGTH': {{trial_length}}
+    }
+</script>
+{% endblock %}
 
-</head>
-
-<body>
-  <div class = "gameContainer">
+{% block content %}
+<div class = "gameContainer">
   	<table class = "gameTableContainer">
 	  	<tr class = "gameWindow">
         <td>
@@ -34,5 +35,4 @@
 	  	</tr>
   	</table>
   </div>
-</body>
-</html>
+{% endblock %}

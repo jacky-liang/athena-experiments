@@ -67,10 +67,11 @@ def run(request):
     
     context = {
         'title': 'Experiments Run',
-        'id': id
+        'id': id,
+        'trial_length': _TRIAL_LENGTH
     }
     
-    return render(request, 'trials/run.html', context)
+    return render(request, 'trials/experiment.html', context)
     
 def token(request):
     id = _get_id(request)
