@@ -1,12 +1,91 @@
 {% extends "trials/__base.html" %}
 
+{% load staticfiles %}
+
+{% block extra_head %}
+    <script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
+    <!-- Local css and js-->
+    <script src="{% static 'trials/js/survey.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'trials/css/survey.css' %}">
+{% endblock %}
+
+{% block env %}
+<script type="text/javascript">
+    var ENV = {
+        'TRIAL_ID':"{{id}}",
+        'CSRF': '{{csrf_token}}',
+    }
+</script>
+{% endblock %}
+
 {% block content %}
 <div class="container">
     <div class="jumbotron">
-        <h1>This is the survey page</h1>
-                <p> with id {{id}} </p>
+        <h1> Athena Experiment </h1>
+        <form class="form-horizontal" id='survey_form'>
+            <fieldset>
+
+            <!-- Form Name -->
+            <legend>Participant Survey</legend>
+
+            <!-- Age-->
+            <div class="form-group">
+              <label class="col-md-4 control-label" for="age">Age</label>  
+              <div class="col-md-4">
+              <input id="age" name="age" type="text" placeholder="" class="form-control input-md" required="">
+                
+              </div>
+            </div>
+
+            <!-- Video game -->
+            <div class="form-group">
+              <label class="col-md-4 control-label" for="video_game_player">Do you play video games often?</label>
+              <div class="col-md-4"> 
+                <label class="radio-inline" for="video_game_player-0">
+                  <input type="radio" name="video_game_player" id="video_game_player-0" value="True" checked="checked">
+                  Yes
+                </label> 
+                <label class="radio-inline" for="video_game_player-1">
+                  <input type="radio" name="video_game_player" id="video_game_player-1" value="False">
+                  No
+                </label>
+              </div>
+            </div>
+
+            <!-- Experience -->
+            <div class="form-group">
+              <label class="col-md-4 control-label" for="experience">How many times have you done this experiment before?</label>  
+              <div class="col-md-4">
+              <input id="experience" name="experience" type="text" placeholder="0" class="form-control input-md" required="">
+              <span class="help-block">Numerals Only</span>  
+              </div>
+            </div>
+
+            <!-- WPM -->
+            <div class="form-group">
+              <label class="col-md-4 control-label" for="wpm">Words Per Minute (Typing speed)</label>  
+              <div class="col-md-4">
+              <input id="wpm" name="wpm" type="text" placeholder="" class="form-control input-md">
+              <span class="help-block">Optional. You can check yours at 10fastfingers.com/typing-test</span>  
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+              <label class="col-md-4 control-label" for="email">Email</label>  
+              <div class="col-md-4">
+              <input id="email" name="email" type="text" placeholder="" class="form-control input-md">
+              <span class="help-block">Optional. We won't spam you! This is used for updates for new HITs and potential follow up studies.</span>  
+              </div>
+            </div>
+
+            <input type='submit' class="btn btn-lg btn-success" role="button" id='submit'></input>
+            
+            </fieldset>
+            </form>
+
         <p>
-            <a class="btn btn-lg btn-success" href="/trials/run/?id={{id}}" role="button">Proceed to experiment</a>
+            
         </p>
     </div>
 </div>

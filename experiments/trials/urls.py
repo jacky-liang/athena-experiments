@@ -15,5 +15,5 @@ urlpatterns = [
     url(r'^time_start/$', views.time_start, name='time_start'),
     url(r'^data/survey/$', views.submit_survey, name='submit_survey'),
     url(r'^data/events/$', views.submit_events, name='submit_events'),
-    url('r^has_been_completed/$', views.has_been_completed, name='has_been_completed')
+    url(r'^has_been_completed/$', views.has_been_completed, name='has_been_completed')
 ]

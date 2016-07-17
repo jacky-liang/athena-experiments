@@ -30,10 +30,10 @@ def index(request):
     }
     return render(request, 'trials/index.html', context)
     
-def has_been_completed(request, portion='', id=''):
+def has_been_completed(request):
     context = {
-        'portion': portion,
-        'id': id
+        'portion': request.GET.get('portion', ''),
+        'id': request.GET.get('id','')
     }
     
     return render(request, 'trials/has_been_completed.html', context)
@@ -47,9 +47,9 @@ def survey(request):
     trial = _get_trial(id)        
         
     if trial.survey_completed:
-        return redirect('has_been_completed', portion='survey', id=id)
+        return redirect('/trials/has_been_completed?portion=survey&id={0}'.format(id))
     if trial.trial_completed:
-        return redirect('has_been_completed', portion='entirety', id=id)
+        return redirect('/trials/has_been_completed?portion=entirety&id={0}'.format(id))
         
     context = {
         'title': 'Experiments Survey',
@@ -61,8 +61,11 @@ def run(request):
     id = _get_id(request)
     trial = _get_trial(id)
     
+    if not trial.survey_completed:
+        return redirect('/trials/survey/?id={0}'.format(id))
+    
     if trial.trial_completed:
-        return redirect('has_been_completed', portion='entirety', id=id)
+        return redirect('/trials/has_been_completed?portion=entirety&id={0}'.format(id))
     
     context = {
         'title': 'Experiments Run',
@@ -81,7 +84,6 @@ def token(request):
     else:
         return HttpResponseForbidden()
         
-@csrf_exempt
 def time_start(request):
     if request.method == 'POST':
         id = _get_id(request)
@@ -125,7 +127,6 @@ def verify(request):
     else:
         raise Http404('Page not found')
         
-@csrf_exempt
 def complete(request):
     if request.method == 'POST':
         id = _get_id(request)
@@ -154,17 +155,15 @@ def complete(request):
     else:
         raise Http404('Page not found')
         
-@csrf_exempt
 def submit_survey(request):
     if request.method == 'POST':
         id = _get_id(request)
         trial = _get_trial(id)
         
-        res_data = {'success':False}
+        res_data = {'success':False};
         
         if not trial.survey_completed:
             data = json.loads(request.body)
-            print data
             for key in ('age', 'wpm', 'video_game_player', 'experience', 'email'):
                 if key in data:
                     setattr(trial, key, data[key])
@@ -177,7 +176,6 @@ def submit_survey(request):
     else:
         raise Http404('Page not found')
         
-@csrf_exempt
 def submit_events(request):
     if request.method == 'POST':
         id = _get_id(request)
