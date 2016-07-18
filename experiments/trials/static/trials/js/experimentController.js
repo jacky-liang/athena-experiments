@@ -316,6 +316,18 @@ function storeTediousData(intendedChar, pressedChar, isBackspace, correct){
 }
 
 $(document).ready(function(){
-	experimentDuration = ENV.TRIAL_LENGTH; //Time in minutes
+ function csrfSafeMethod(method) {
+			return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+ }
+ 
+ $.ajaxSetup({
+	beforeSend: function(xhr, settings) {
+			if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+					xhr.setRequestHeader("X-CSRFToken", ENV.CSRF);
+					}
+			}
+	});
+
+	experimentDuration = ENV.TRIAL_LENGTH/60; //Time in minutes
 	initGame();
 });
