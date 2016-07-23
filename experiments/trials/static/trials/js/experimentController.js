@@ -332,10 +332,10 @@ $(document).ready(function(){
 			}
 	});
 
-  experimentData.ratio = 1; //Get ratio from ENV here
-  experimentData.period = 30; //Get period here
+  experimentData.ratio = ENV.TRIAL_TYPE.ratio; //Get ratio from ENV here
+  experimentData.period = ENV.TRIAL_TYPE.period; //Get period here
   //TediousFirst Parameter- temporarily set as true
-	initGame(true);
+	initGame(ENV.TRIAL_TYPE.tedious_first);
   window.setInterval(function(){
     updateTime();
     var newTask = chooseTask();
