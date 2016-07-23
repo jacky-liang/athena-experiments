@@ -22,18 +22,12 @@
 
 {% block content %}
 <div class = "gameContainer">
-  	<table class = "gameTableContainer">
-	  	<tr class = "gameWindow">
-        <td>
-          <div id= "gameWindow" class = "gameDivContainer"></div>
-        </td>
-	  	</tr>
-	  	<tr class = "inputWindow">
-        <td>
-          <div class = "textContainer"><textarea id = "userInput" oninput = "getUserText()"></textarea></div>
-					<div id = "scoreWindow"></div>
-        </td>
-	  	</tr>
-  	</table>
-  </div>
+    <div id= "gameWindow" class = "gameDivContainer">
+    </div>
+    <div class = "textContainer"><textarea id = "userInput" oninput = "getUserText()"></textarea></div>
+    <div id = "scoreWindow">
+      <div id = "score"></div>
+      <div id = "time"><div>
+    </div>    
+</div>
 {% endblock %}

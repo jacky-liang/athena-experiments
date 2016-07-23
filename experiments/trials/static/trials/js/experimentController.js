@@ -1,7 +1,7 @@
 //Global Variables
 var gameData = {lastSwitch: 0};
 var gameMode = {tedious: 0, relaxed: 1};
-var experimentData = {events: [], taskDuration: 0.5, experimentType: 0};
+var experimentData = {events: []};
 var maxStringLength = 10;
 var minStringLength = 5;
 var numString = 1;
@@ -9,17 +9,21 @@ var numCircles = 4;
 var experimentDuraction = null;
 
 //Initializes the game
-function initGame(){
+function initGame(tediousFirst){
 	gameData.score = 0;
 	updateScore();
 	gameData.lastSwitch = 0;
 	gameData.currentTask = 0;
 	console.log("Finished Initialization, waiting on user ready...");
-	var readyDiv = document.createElement('div');
 
 	var startTime = new Date();
 	experimentData.startTime = startTime;
-	tediousTask();
+  if (tediousFirst){
+	  tediousTask();
+  }else{
+    relaxedTask();
+  }
+  updateTime();
 }
 
 //Helper Functions
@@ -31,24 +35,15 @@ function tediousTask(){
 	$('#scoreWindow').css("display", "block");
 	gameData.taskCount = numString;
 	gameData.tediousArray = [];
-
+  gameData.prevLength = 0;
 	//Generate random strings for current tedious task
 	for(var i = 0; i < numString; i++){
 		var curString = generateString();
 		gameData.tediousArray.push(curString);
-		var divsize = 15 * maxStringLength;
-		var posx = (Math.random() * ($('#gameWindow').width() - divsize)).toFixed();
-    var posy = (Math.random() * ($('#gameWindow').height() - divsize)).toFixed();
-		$newdiv = $("<div id =" + curString + " class = \"tediousTask\">" + curString + "</div>").css({
-			'position':'absolute',
-      'left':posx+'px',
-      'top':posy+'px',
-    });
-		gameData.curChar = curString[0];
+		$newdiv = $("<div id =" + curString + " class = \"tediousTask\">" + curString + "</div>");
 		gameData.curString = curString;
-		gameData.playerString = "";
-		gameData.prevString = "";
 		$('#gameWindow').append($newdiv);
+    $('#' + curString).css({"left": $('#gameWindow').width()/2 - $('#' + curString).width()/2})
 	}
 }
 
@@ -70,55 +65,52 @@ function relaxedTask(){
 //Handles the tedious Task inputs
 function getUserText(){
 	var input = $('#userInput').val();
-	if (input == ""){
-		return;
-	}
 	var curString = gameData.curString;
-	if (input.length > 1){
-		if (gameData.prevString.length - input.length == 1){
-			storeTediousData(gameData.curChar, null, true, false);
-		}else{
-			storeTediousData(gameData.curChar, input[input.length-1], false, false);
-		}
-		gameData.prevString = input; 
-		return;
-	}else if (input == gameData.curChar){
-		//If the user has typed same character as the current character -> color the character green and move on
-		storeTediousData(gameData.curChar, input[input.length-1], false, true);
-		gameData.playerString = gameData.playerString + input;
-		//End of the tedious task, finished completing the string
-		if (gameData.playerString == gameData.curString){
-			gameData.score++;
-			updateScore();
-			$('#' + curString).remove();
-			$('#userInput').val("");
-			gameData.taskCount--;
-			if (isTimeUp()){
-				endExperiment();
-				return;
-			}
-			if (gameData.taskCount == 0){
-				startTask(chooseTask());
-			}
-		}else{
-			//The string has not been completed yet -> mark completed part green and leave the rest untouched
-			var endString = curString.substring(gameData.playerString.length);
-			$('#' + curString).html('<span style="color: green">'+ gameData.playerString + '</span>' + endString);
-			$('#userInput').val("");
-			gameData.curChar = curString.substring(gameData.playerString.length, gameData.playerString.length + 1);
-		}	
-	}else{
-		//This current character is incorrect -> color it red
-		if (gameData.prevString.length - input.length == 1){
-			storeTediousData(gameData.curChar, null, true, false);
-		}else{
-			storeTediousData(gameData.curChar, input[input.length-1], false, false);
-		}
-		var endString = curString.substring(gameData.playerString.length + 1);
-		var incorrectChar = curString.substring(gameData.playerString.length, gameData.playerString.length + 1);
-		$('#' + curString).html('<span style="color: green">'+ gameData.playerString + '</span>' + '<span style="color: red">'+ incorrectChar + '</span>' + endString);	
-	}
-	gameData.prevString = input; 
+ 
+  if (input == curString){
+    //End of tedious task, finished completing the string
+    storeTediousData(curString[curString.length -1], input[input.length -1], false, true);
+    gameData.score++;
+    updateScore();
+    $('#' + curString).remove();
+    $('#userInput').val("");
+    gameData.taskCount--;
+    if (gameData.taskCount == 0){
+      tediousTask();
+    }
+  }else{
+    //The task isn't complete because the string is not correct
+    //Highlight the correct characters
+    var correctString = "";
+    for (var i in input){
+      if (i < curString.length && input[i] == curString[i]){
+        correctString = correctString + curString[i];
+      }else{
+        break;
+      }
+    }
+    var wrongString = curString[correctString.length];
+    var restOfString = curString.substring(correctString.length + 1);
+    if (input.length == correctString.length){
+      wrongString = "";
+      restOfString = curString.substring(correctString.length);
+      if (gameData.prevLength - input.length== 1){
+        //They pressed backspace
+        storeTediousData(input.slice(-1), null, true, true);
+      }else{
+        storeTediousData(correctString[correctString.length - 1], input[input.length - 1], false, true);
+      }
+    }else{
+      if (gameData.prevLength - input.length == 1){
+        //They pressed backspace
+        storeTediousData(wrongString, null, true, false);
+      }else{
+        storeTediousData(wrongString, input[input.length - 1], false, false);
+      }
+    }
+		$('#' + curString).html('<span style="color: green">'+ correctString + '</span>' + '<span style="color: red">'+ wrongString + '</span>' + restOfString);
+  }
+  gameData.prevLength = input.length;
 }
 
 function makeCircle(num, divsize, type){
@@ -143,6 +135,7 @@ function makeCircle(num, divsize, type){
     	otherType = "sibling";
     }
     $newdiv.draggable({
+      scroll: false,
 			start: function(){
 				storeRelaxedData(true, false, false);
 			},
@@ -157,14 +150,10 @@ function makeCircle(num, divsize, type){
     	drop: function(event, ui){
     		ui.draggable.remove();
     		$(this).remove();
-    		if (isTimeUp()){
-					endExperiment();
-					return;
-				}
 				storeRelaxedData(false, true, true);
     		gameData.taskCount--;
     		if (gameData.taskCount == 0){
-    			startTask(chooseTask());
+          relaxedTask();
     		}
     	}
     });
@@ -185,36 +174,33 @@ function getCurTime(){
 	return ((curTime.getTime() - experimentData.startTime.getTime())/1000)/60;
 }
 
-/*
-Determines if time is greater than experiment duration
-	Time is up -> true
-	Time isn't up yet -> false
-*/
-function isTimeUp(){
-	return  getCurTime(experimentData.startTime) > experimentDuration;
-}
-
 //Determines if it is time to switch Task
 function chooseTask(){
-	var curDuration = getCurTime();
-	var switchDuration = experimentData.taskDuration + gameData.lastSwitch;
-	//Switch every taskDuration
-	if (experimentData.experimentType == 0){
-		if (curDuration > switchDuration){
-			gameData.lastSwitch = getCurTime();
-			gameData.currentTask = otherTask(gameData.currentTask);
-			return gameData.currentTask;
-		}
-	}
-	return gameData.currentTask;
+	var curDuration = Math.round(getExperimentTime());
+  if (experimentData.ratio == 1 || experimentData.period == -1){
+    return gameData.currentTask;
+  }
+  if (gameData.currentTask == gameMode.tedious){
+    //If the current task is tedious, check to see if duration is up
+    var tediousDuration = experimentData.ratio * experimentData.period;
+    var switchDuration = Math.round(gameData.lastSwitch + tediousDuration);
+  }else{
+    var relaxedDuration = (1 - experimentData.ratio) * experimentData.period;
+    var switchDuration = Math.round(gameData.lastSwitch + relaxedDuration);
+  }
+  if (curDuration >= switchDuration){
+			gameData.lastSwitch = getExperimentTime();
+      return otherTask(gameData.currentTask);
+  }
+  return gameData.currentTask;
 }
 
 function startTask(task){
-	if (task == gameMode.tedious){
-		tediousTask();
-		return;
-	}
-	relaxedTask();
+  if (task == gameMode.tedious){
+      tediousTask();
+      return;
+  }
+  relaxedTask();
 }
 
 function otherTask(task){
@@ -280,8 +266,26 @@ function endExperiment(){
 
 //Updates the score Window
 function updateScore(){
-	$('#scoreWindow').empty();
-	$('#scoreWindow').append("Score: " + gameData.score);
+	$('#score').empty();
+	$('#score').append("Score: " + gameData.score);
+}
+
+function updateTime(){
+  $('#time').empty();
+  var curSeconds = getExperimentTime();
+  var gameDuration = ENV.TRIAL_LENGTH;
+  var delta = gameDuration - curSeconds;
+  if (delta <= 0){
+    endExperiment();
+    return;
+  }
+  var minutesLeft = Math.floor(delta/60);
+  var secondsLeft= Math.round(delta - minutesLeft*60);
+  if (secondsLeft == 60){
+    minutesLeft = minutesLeft + 1;
+    secondsLeft = 0;
+  }
+  $('#time').append("Time: " + minutesLeft + ":" + ("0" + secondsLeft).slice(-2));
 }
 
 function storeRelaxedData(drag, release, correct){
@@ -328,6 +332,16 @@ $(document).ready(function(){
 			}
 	});
 
-	experimentDuration = ENV.TRIAL_LENGTH/60; //Time in minutes
-	initGame();
+  experimentData.ratio = 1; //Get ratio from ENV here
+  experimentData.period = 30; //Get period here
+  //TediousFirst Parameter- temporarily set as true
+	initGame(true);
+  window.setInterval(function(){
+    updateTime();
+    var newTask = chooseTask();
+    if (newTask != gameData.currentTask){
+      gameData.currentTask = newTask;
+      startTask(newTask);
+    }
+  }, 1000);
 });
