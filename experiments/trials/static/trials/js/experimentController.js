@@ -333,17 +333,15 @@ $(document).ready(function(){
   });
 
   var startTrialUrl = "/trials/time_start/?id=" + ENV.TRIAL_ID;
-
   $.ajax({
     type: "POST",
     url: startTrialUrl,
-    contentType: 'application/json',
     success: function(res){
       if (res.success){
-        experimentData.ratio = ENV.TRIAL_TYPE.ratio; //Get ratio from ENV here
-        experimentData.period = ENV.TRIAL_TYPE.period; //Get period here
+        experimentData.ratio = ENV.trial_type.ratio; //Get ratio from ENV here
+        experimentData.period = ENV.trial_type.period; //Get period here
         //TediousFirst Parameter- temporarily set as true
-        initGame(ENV.TRIAL_TYPE.tedious_first);
+        initGame(ENV.trial_type.tedious_first);
         window.setInterval(function(){
           updateTime();
           var newTask = chooseTask();
@@ -353,7 +351,7 @@ $(document).ready(function(){
           }
         }, 1000);
       }else{
-        alert("YOU MESSED UP BUD");
+        alert("Experiment not set up correctly: " + res.msg);
       }
     }
   });
