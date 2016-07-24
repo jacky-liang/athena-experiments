@@ -58,3 +58,6 @@ target/
 
 #sqlite3
 *.sqlite3
+
+#Global variables
+.env

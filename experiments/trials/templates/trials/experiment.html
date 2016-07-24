@@ -13,6 +13,7 @@
 <script type="text/javascript">
     var ENV = {
         'TRIAL_ID':"{{id}}",
+        'CSRF': '{{csrf_token}}',
         'ASSET_PATH': "{% static 'trials/assets/' %}",
         'TRIAL_LENGTH': {{trial_length}},
         'trial_type': {{trial_type}}
