@@ -10,16 +10,16 @@ var experimentDuraction = null;
 
 //Initializes the game
 function initGame(tediousFirst){
-	gameData.score = 0;
-	updateScore();
-	gameData.lastSwitch = 0;
-	gameData.currentTask = 0;
-	console.log("Finished Initialization, waiting on user ready...");
+  gameData.score = 0;
+  updateScore();
+  gameData.lastSwitch = 0;
+  gameData.currentTask = 0;
+  console.log("Finished Initialization, waiting on user ready...");
 
-	var startTime = new Date();
-	experimentData.startTime = startTime;
+  var startTime = new Date();
+  experimentData.startTime = startTime;
   if (tediousFirst){
-	  tediousTask();
+    tediousTask();
   }else{
     relaxedTask();
   }
@@ -30,42 +30,42 @@ function initGame(tediousFirst){
 
 //Sets up the tedious Task
 function tediousTask(){
-	$('#gameWindow').empty();
-	$('#userInput').css("display", "block");
-	$('#scoreWindow').css("display", "block");
-	gameData.taskCount = numString;
-	gameData.tediousArray = [];
+  $('#gameWindow').empty();
+  $('#userInput').css("display", "block");
+  $('#scoreWindow').css("display", "block");
+  gameData.taskCount = numString;
+  gameData.tediousArray = [];
   gameData.prevLength = 0;
-	//Generate random strings for current tedious task
-	for(var i = 0; i < numString; i++){
-		var curString = generateString();
-		gameData.tediousArray.push(curString);
-		$newdiv = $("<div id =" + curString + " class = \"tediousTask\">" + curString + "</div>");
-		gameData.curString = curString;
-		$('#gameWindow').append($newdiv);
+  //Generate random strings for current tedious task
+  for(var i = 0; i < numString; i++){
+    var curString = generateString();
+    gameData.tediousArray.push(curString);
+    $newdiv = $("<div id =" + curString + " class = \"tediousTask\">" + curString + "</div>");
+    gameData.curString = curString;
+    $('#gameWindow').append($newdiv);
     $('#' + curString).css({"left": $('#gameWindow').width()/2 - $('#' + curString).width()/2})
-	}
+  }
 }
 
 function relaxedTask(){
-	$('#gameWindow').empty();
-	$('#userInput').css("display", "none");
-	$('#scoreWindow').css("display", "none");
+  $('#gameWindow').empty();
+  $('#userInput').css("display", "none");
+  $('#scoreWindow').css("display", "none");
 
-	gameData.taskCount = numCircles;
-	var circleTypes = shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9]);
-	
-	for (var i = 0; i < numCircles; i++){
-		var divsize = ((Math.random()*100) + 50).toFixed();
-		makeCircle(circleTypes[i], divsize, "");
-		makeCircle(circleTypes[i], divsize, "sibling");
-	}
+  gameData.taskCount = numCircles;
+  var circleTypes = shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+  
+  for (var i = 0; i < numCircles; i++){
+    var divsize = ((Math.random()*100) + 50).toFixed();
+    makeCircle(circleTypes[i], divsize, "");
+    makeCircle(circleTypes[i], divsize, "sibling");
+  }
 }
 
 //Handles the tedious Task inputs
 function getUserText(){
-	var input = $('#userInput').val();
-	var curString = gameData.curString;
+  var input = $('#userInput').val();
+  var curString = gameData.curString;
  
   if (input == curString){
     //End of tedious task, finished completing the string
@@ -108,7 +108,7 @@ function getUserText(){
         storeTediousData(wrongString, input[input.length - 1], false, false);
       }
     }
-		$('#' + curString).html('<span style="color: green">'+ correctString + '</span>' + '<span style="color: red">'+ wrongString + '</span>' + restOfString);
+    $('#' + curString).html('<span style="color: green">'+ correctString + '</span>' + '<span style="color: red">'+ wrongString + '</span>' + restOfString);
   }
   gameData.prevLength = input.length;
 }
@@ -132,30 +132,30 @@ function makeCircle(num, divsize, type){
 
     var otherType = "";
     if (type == ""){
-    	otherType = "sibling";
+      otherType = "sibling";
     }
     $newdiv.draggable({
       scroll: false,
-			start: function(){
-				storeRelaxedData(true, false, false);
-			},
-			stop: function(){
-				storeRelaxedData(false, true, false);
-			},
-		});
+      start: function(){
+        storeRelaxedData(true, false, false);
+      },
+      stop: function(){
+        storeRelaxedData(false, true, false);
+      },
+    });
     $newdiv.droppable({
-    	tolerance: "intersect",
-    	accept: '#circle' + num + otherType,
-    	hoverClass: "hover",
-    	drop: function(event, ui){
-    		ui.draggable.remove();
-    		$(this).remove();
-				storeRelaxedData(false, true, true);
-    		gameData.taskCount--;
-    		if (gameData.taskCount == 0){
+      tolerance: "intersect",
+      accept: '#circle' + num + otherType,
+      hoverClass: "hover",
+      drop: function(event, ui){
+        ui.draggable.remove();
+        $(this).remove();
+        storeRelaxedData(false, true, true);
+        gameData.taskCount--;
+        if (gameData.taskCount == 0){
           relaxedTask();
-    		}
-    	}
+        }
+      }
     });
     
     $newdiv.prepend('<img src="' + ENV.ASSET_PATH + 'circle' + num + '.png" class = "circleImg"/>');
@@ -164,19 +164,19 @@ function makeCircle(num, divsize, type){
 
 //Returns time in seconds
 function getExperimentTime(){
-	var curTime = new Date();
-	return ((curTime.getTime() - experimentData.startTime.getTime())/1000);
+  var curTime = new Date();
+  return ((curTime.getTime() - experimentData.startTime.getTime())/1000);
 }
 
 //Returns time in minutes
 function getCurTime(){
-	var curTime = new Date();
-	return ((curTime.getTime() - experimentData.startTime.getTime())/1000)/60;
+  var curTime = new Date();
+  return ((curTime.getTime() - experimentData.startTime.getTime())/1000)/60;
 }
 
 //Determines if it is time to switch Task
 function chooseTask(){
-	var curDuration = Math.round(getExperimentTime());
+  var curDuration = Math.round(getExperimentTime());
   if (experimentData.ratio == 1 || experimentData.period == -1){
     return gameData.currentTask;
   }
@@ -189,7 +189,7 @@ function chooseTask(){
     var switchDuration = Math.round(gameData.lastSwitch + relaxedDuration);
   }
   if (curDuration >= switchDuration){
-			gameData.lastSwitch = getExperimentTime();
+      gameData.lastSwitch = getExperimentTime();
       return otherTask(gameData.currentTask);
   }
   return gameData.currentTask;
@@ -204,23 +204,23 @@ function startTask(task){
 }
 
 function otherTask(task){
-	if (task == gameMode.tedious){
-		return gameMode.relaxed;
-	}
-	return gameMode.tedious;
+  if (task == gameMode.tedious){
+    return gameMode.relaxed;
+  }
+  return gameMode.tedious;
 }
 
 function generateString()
 {
     var text = "";
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-		var stringLength = Math.round(Math.random() * maxStringLength);
+    var stringLength = Math.round(Math.random() * maxStringLength);
 
-		//Keep generating stringLengths until it matches the size we want
-		while(stringLength < minStringLength){
-			stringLength = Math.round(Math.random() * maxStringLength);
-		}
-	
+    //Keep generating stringLengths until it matches the size we want
+    while(stringLength < minStringLength){
+      stringLength = Math.round(Math.random() * maxStringLength);
+    }
+  
     for( var i=0; i < stringLength; i++ )
         text += possible.charAt(Math.floor(Math.random() * possible.length));
 
@@ -244,30 +244,30 @@ function shuffle(array) {
 
 //Ends the experiment
 function endExperiment(){
-	$('#gameWindow').empty();
-	$('#gameWindow').append("<div>Experiment is over..</div>");
-	submit_event_url = "/trials/data/events/?id=" + ENV.TRIAL_ID;
-	$.ajax({
-		type: "POST",
-		url: submit_event_url,
-		contentType: 'application/json',
-		data: JSON.stringify(experimentData.events),
-		dataType: 'json',
-		success: function(res){
-			if (res.success){
-				complete_url = '/trials/complete/?id=' + ENV.TRIAL_ID;
-				window.location=complete_url;
-			}else{
-				alert("YOU MESSED UP BUD");
-			}
-		}
-	});
+  $('#gameWindow').empty();
+  $('#gameWindow').append("<div>Experiment is over..</div>");
+  var submit_event_url = "/trials/data/events/?id=" + ENV.TRIAL_ID;
+  $.ajax({
+    type: "POST",
+    url: submit_event_url,
+    contentType: 'application/json',
+    data: JSON.stringify(experimentData.events),
+    dataType: 'json',
+    success: function(res){
+      if (res.success){
+        complete_url = '/trials/complete/?id=' + ENV.TRIAL_ID;
+        window.location=complete_url;
+      }else{
+        alert("YOU MESSED UP BUD");
+      }
+    }
+  });
 }
 
 //Updates the score Window
 function updateScore(){
-	$('#score').empty();
-	$('#score').append("Score: " + gameData.score);
+  $('#score').empty();
+  $('#score').append("Score: " + gameData.score);
 }
 
 function updateTime(){
@@ -289,59 +289,73 @@ function updateTime(){
 }
 
 function storeRelaxedData(drag, release, correct){
-	var Event = {
-		'Timestamp': getExperimentTime(),
-		'Action': {
-			'Tedious': null,	
-			'Relaxed': {
-				'circle_drag': drag,
-				'circle_release': release,
-				'result': correct
-			}
-		}
-	};
-	experimentData.events.push(Event);
+  var Event = {
+    'Timestamp': getExperimentTime(),
+    'Action': {
+      'Tedious': null,  
+      'Relaxed': {
+        'circle_drag': drag,
+        'circle_release': release,
+        'result': correct
+      }
+    }
+  };
+  experimentData.events.push(Event);
 }
 
 function storeTediousData(intendedChar, pressedChar, isBackspace, correct){
-	var Event = {
-		'Timestamp': getExperimentTime(),
-		'Action': {
-			'Relaxed': null,	
-			'Tedious': {
-				'intended_char': intendedChar,
-				'pressed_char': pressedChar,
-				'is_backspace': isBackspace,
-				'result': correct
-			}
-		}
-	};
-	experimentData.events.push(Event);
+  var Event = {
+    'Timestamp': getExperimentTime(),
+    'Action': {
+      'Relaxed': null,  
+      'Tedious': {
+        'intended_char': intendedChar,
+        'pressed_char': pressedChar,
+        'is_backspace': isBackspace,
+        'result': correct
+      }
+    }
+  };
+  experimentData.events.push(Event);
 }
 
 $(document).ready(function(){
  function csrfSafeMethod(method) {
-			return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+      return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
  }
  
  $.ajaxSetup({
-	beforeSend: function(xhr, settings) {
-			if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-					xhr.setRequestHeader("X-CSRFToken", ENV.CSRF);
-					}
-			}
-	});
+  beforeSend: function(xhr, settings) {
+      if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+          xhr.setRequestHeader("X-CSRFToken", ENV.CSRF);
+          }
+      }
+  });
 
-  experimentData.ratio = ENV.TRIAL_TYPE.ratio; //Get ratio from ENV here
-  experimentData.period = ENV.TRIAL_TYPE.period; //Get period here
-  //TediousFirst Parameter- temporarily set as true
-	initGame(ENV.TRIAL_TYPE.tedious_first);
-  window.setInterval(function(){
-    updateTime();
-    var newTask = chooseTask();
-    if (newTask != gameData.currentTask){
-      gameData.currentTask = newTask;
-      startTask(newTask);
+  var startTrialUrl = "/trials/time_start/?id=" + ENV.TRIAL_ID;
+
+  $.ajax({
+    type: "POST",
+    url: startTrialUrl,
+    contentType: 'application/json',
+    success: function(res){
+      if (res.success){
+        experimentData.ratio = ENV.TRIAL_TYPE.ratio; //Get ratio from ENV here
+        experimentData.period = ENV.TRIAL_TYPE.period; //Get period here
+        //TediousFirst Parameter- temporarily set as true
+        initGame(ENV.TRIAL_TYPE.tedious_first);
+        window.setInterval(function(){
+          updateTime();
+          var newTask = chooseTask();
+          if (newTask != gameData.currentTask){
+            gameData.currentTask = newTask;
+            startTask(newTask);
+          }
+        }, 1000);
+      }else{
+        alert("YOU MESSED UP BUD");
+      }
     }
-  }, 1000);
+  });
+
 });
