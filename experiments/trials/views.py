@@ -187,9 +187,9 @@ def complete(request):
     
     context = {}
     
-    if False and not enough_time:
+    if not enough_time:
         context['msg'] = 'An error has occured to complete the trial for {0}. Trial is unable to be marked complete!'.format(id)
-    elif False and trial.events == None:
+    elif trial.events == None:
         context['msg'] = 'Data for this trial with id {0} has not been properly submitted! Unable to mark complete!'.format(id)
     else:    
         context['msg'] = "Thanks for completing the experiment! Here's the token for the trial: {0}".format(trial.token)
