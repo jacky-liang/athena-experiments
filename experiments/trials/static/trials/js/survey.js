@@ -17,7 +17,7 @@ $(document).ready(function(){
    survey_form.validate({
             rules: {
                 wpm: {
-                    required: false,
+                    required: true,
                     digits: true
                 },
                 age: {

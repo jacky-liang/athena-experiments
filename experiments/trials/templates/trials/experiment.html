@@ -15,7 +15,8 @@
         'TRIAL_ID':"{{id}}",
         'CSRF': '{{csrf_token}}',
         'ASSET_PATH': "{% static 'trials/assets/' %}",
-        'TRIAL_LENGTH': {{trial_length}}
+        'TRIAL_LENGTH': {{trial_length}},
+        'trial_type': {{trial_type}}
     }
 </script>
 {% endblock %}
