@@ -31,8 +31,11 @@
         
 </head>
 <body>
+{% autoescape off %}
 {% block env %}
 {% endblock %}
+{% endautoescape %}
+
 {% block content %}
 {% endblock %}
 </body>
